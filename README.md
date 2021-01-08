@@ -1,3 +1,3 @@
-# RemoteDevice
+# B_monitor
 Send the information from phone's camera and microphone to PC.
 Since I don't have a remote work environment (camera, microphone, etc.), to use my phone instead...
