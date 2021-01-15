@@ -1,0 +1,23 @@
+{
+  "name": "B_monitor",
+  "version": "1.0.0",
+  "description": "Send the information from phone's camera and microphone to PC.\r Since I don't have a remote work environment (camera, microphone, etc.), to use my phone instead...",
+  "main": "receiver.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fukuda-B/B_monitor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fukuda-B/B_monitor/issues"
+  },
+  "homepage": "https://github.com/Fukuda-B/B_monitor#readme",
+  "dependencies": {
+    "ws": "^7.4.2"
+  }
+}

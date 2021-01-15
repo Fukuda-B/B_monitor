@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style_sender.css">
-  <title>B_monitor Sender</title>
+  <link rel="stylesheet" href="style_receiver.css">
+  <title>B_monitor Receiver</title>
 </head>
 <body>
   <div id="main_frame">
-    <input type="button" value="Start Websocket Send" onclick="update_canvas();">
+    <!-- <input type="button" value="Start Websocket Send" onclick="update_canvas();"> -->
     <canvas id="cap_video"></canvas>
     <!-- <p>Capture Canvas</p><br> -->
     <video id="main_video"></video>
-    <p>OBS</p><p id="info"></p>
+    <!-- <p>OBS</p><p id="info"></p> -->
     <img id="receive_video" src="" alt="data">
-    <!-- <p>Receive from Websocket</p> -->
+    <p>Receive from Websocket</p>
   </div>
 </body>
-<script src="sender.js"></script>
+<script src="receiver.js"></script>
 </html>
