@@ -1,6 +1,6 @@
 'use strict';
 
-
+var recInt = 500; // Recode Interval
 var fps = 10; // Frame rate / (s)
 var videoQuo = 0.5 // Video Quality (Max: 1.0)
 var constraints = {
@@ -8,7 +8,7 @@ var constraints = {
   video: {
 //    width: { min: 640, max: 640},
 //    height: { min: 360, max: 360},
-//    frameRate: {ideal: 10, max: 15},
+   frameRate: {ideal: fps, max: fps},
   },
   //video: {facingMode: "user"} // Select FrontCamera
   //video: {facingMode: {exact: "enviroment"}} // Select RearCamera
@@ -47,15 +47,16 @@ navigator.mediaDevices.getUserMedia(constraints)
     console.log('Size: '+video.videoWidth+'x'+video.videoHeight);
     info.innerHTML = 'CaptureSize: '+video.videoWidth+'x'+video.videoHeight;
     video.play();
+    rec_media(mediaStream); // recode mediaStream
 
     video_c.height = video.videoHeight;
     video_c.width = video.videoWidth;
   };
 })
-.catch(function(err) { console.log(err.name + ": " + err.message); }); // always check for errors at the end.
+.catch(function(err) { console.log(err.name + ": " + err.message); });
 
 
-/* Update canvas frame */
+/* Update canvas frame (Unused) */
 function update_canvas() {
   ctx.drawImage(video, 0, 0, video_c.width, video_c.height);
   var dataURI = video_c.toDataURL("image/jpeg", videoQuo);
@@ -63,3 +64,23 @@ function update_canvas() {
   setTimeout(update_canvas, 1000/fps);
 }
 
+/* Record Video + Audio */
+// MediaRecorder: https://developer.mozilla.org/ja/docs/Web/API/MediaRecorder
+function rec_media(mediaStream) {
+  var mediaRec = new MediaRecorder(mediaStream, {
+    mimeType : 'video/webm'
+  });
+  mediaRec.start();
+  setTimeout(rec_req, recInt, mediaRec);
+}
+
+/* Request Record Data */
+function rec_req(mediaRec) {
+  mediaRec.requestData();
+  mediaRec.addEventListener('dataavailable', e=> {
+    if (e.data.size>0) {
+      console.log(e.data);
+      sender(e.data);
+    }
+  })
+}
