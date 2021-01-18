@@ -9,6 +9,7 @@ s.on('connection',function(ws){
         // console.log(message);
 
         s.clients.forEach(function(client){
+          console.log(message);
           client.send(message);
         });
     });

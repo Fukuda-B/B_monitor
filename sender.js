@@ -1,6 +1,6 @@
 'use strict';
 
-var recInt = 500; // Recode Interval
+var recInt = 1000; // Recode Interval
 var fps = 10; // Frame rate / (s)
 var videoQuo = 0.5 // Video Quality (Max: 1.0)
 var constraints = {
@@ -47,7 +47,7 @@ navigator.mediaDevices.getUserMedia(constraints)
     console.log('Size: '+video.videoWidth+'x'+video.videoHeight);
     info.innerHTML = 'CaptureSize: '+video.videoWidth+'x'+video.videoHeight;
     video.play();
-    rec_media(mediaStream); // recode mediaStream
+    RECODE.start(mediaStream); // recode mediaStream
 
     video_c.height = video.videoHeight;
     video_c.width = video.videoWidth;
@@ -64,23 +64,36 @@ function update_canvas() {
   setTimeout(update_canvas, 1000/fps);
 }
 
-/* Record Video + Audio */
-// MediaRecorder: https://developer.mozilla.org/ja/docs/Web/API/MediaRecorder
-function rec_media(mediaStream) {
-  var mediaRec = new MediaRecorder(mediaStream, {
-    mimeType : 'video/webm'
-  });
-  mediaRec.start();
-  setTimeout(rec_req, recInt, mediaRec);
-}
+var RECODE = {
+  _timeout:"",
 
-/* Request Record Data */
-function rec_req(mediaRec) {
-  mediaRec.requestData();
-  mediaRec.addEventListener('dataavailable', e=> {
-    if (e.data.size>0) {
-      console.log(e.data);
-      sender(e.data);
-    }
-  })
+  /* Record Video + Audio */
+  // MediaRecorder: https://developer.mozilla.org/ja/docs/Web/API/MediaRecorder
+  start: function(mediaStream) {
+    var mediaRec = new MediaRecorder(mediaStream, {
+      mimeType : 'video/webm'
+    });
+    mediaRec.start();
+    setTimeout(RECODE.req, recInt, mediaRec);
+    //this._timeout = setInterval(RECODE.req, recInt, mediaRec);
+  },
+
+  /* Stop Record */
+  stop: function(mediaRec) {
+    clearInterval(this._timeout);
+    mediaRec.stop();
+  },
+
+  /* Request Record Data */
+  req: function(mediaRec) {
+    mediaRec.requestData();
+    mediaRec.addEventListener('dataavailable', e=> {
+      if (e.data.size>0) {
+        console.log(e.data);
+        // var blob = new Blob([e.data], {type: 'video/webm'});
+        // console.log(blob);
+        sender(e.data);
+      }
+    })
+  },
 }

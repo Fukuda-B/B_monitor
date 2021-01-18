@@ -10,6 +10,10 @@ socket.addEventListener('open', function(e) {
 });
 // receive
 socket.addEventListener('message', function(e) {
-  receive_video.src = e.data;
-  console.log(e.data.length);
+  receive_video.src = URL.createObjectURL(e.data);
+  console.log(e.data);
 });
+
+function update_canvas() {
+  receive_video.play();
+}
