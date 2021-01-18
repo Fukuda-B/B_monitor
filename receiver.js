@@ -1,5 +1,6 @@
 'use strict';
 
+var blob = [];
 var receive_video = document.getElementById('receive_video');
 
 /* Websocket connection */
@@ -10,8 +11,9 @@ socket.addEventListener('open', function(e) {
 });
 // receive
 socket.addEventListener('message', function(e) {
-  receive_video.src = URL.createObjectURL(e.data);
-  console.log(e.data);
+  blob = new Blob([blob, e.data], {type: 'video/x-matroska;codecs=avc1,opus'});
+  receive_video.src = URL.createObjectURL(blob);
+  console.log(blob);
 });
 
 function update_canvas() {

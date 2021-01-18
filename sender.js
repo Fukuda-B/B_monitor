@@ -1,6 +1,6 @@
 'use strict';
 
-var recInt = 1000; // Recode Interval
+var recInt = 500; // Recode Interval
 var fps = 10; // Frame rate / (s)
 var videoQuo = 0.5 // Video Quality (Max: 1.0)
 var constraints = {
@@ -28,7 +28,8 @@ socket.addEventListener('open', function(e) {
 });
 // receive
 socket.addEventListener('message', function(e) {
-  receive_video.src = e.data;
+  // receive_video.src = e.data;
+  // receive_video.src = URL.createObjectURL(e.data);
 });
 // send
 function sender(data) {
@@ -64,36 +65,48 @@ function update_canvas() {
   setTimeout(update_canvas, 1000/fps);
 }
 
+var mediaRec="";
+
 var RECODE = {
   _timeout:"",
+  conf:"0",
 
   /* Record Video + Audio */
   // MediaRecorder: https://developer.mozilla.org/ja/docs/Web/API/MediaRecorder
   start: function(mediaStream) {
-    var mediaRec = new MediaRecorder(mediaStream, {
+    mediaRec = new MediaRecorder(mediaStream, {
       mimeType : 'video/webm'
     });
     mediaRec.start();
+    // setInterval(RECODE.req, recInt, mediaRec);
+    // this._timeout = setTimeout(RECODE.req, recInt, mediaRec);
     setTimeout(RECODE.req, recInt, mediaRec);
-    //this._timeout = setInterval(RECODE.req, recInt, mediaRec);
   },
 
   /* Stop Record */
   stop: function(mediaRec) {
-    clearInterval(this._timeout);
+    // clearInterval(this._timeout);
     mediaRec.stop();
   },
 
   /* Request Record Data */
   req: function(mediaRec) {
-    mediaRec.requestData();
-    mediaRec.addEventListener('dataavailable', e=> {
-      if (e.data.size>0) {
-        console.log(e.data);
-        // var blob = new Blob([e.data], {type: 'video/webm'});
-        // console.log(blob);
-        sender(e.data);
-      }
-    })
+    var env = 0;
+    try {
+      setTimeout(RECODE.req, recInt, mediaRec);
+      mediaRec.requestData();
+      mediaRec.addEventListener('dataavailable', e=> {
+        if (e.data.size>0 && env === 0) {
+          console.log(e.data);
+          env = 1;
+          // var blob = new Blob([e.data], {type: 'video/x-matroska;codecs=avc1,opus'});
+          // sender(blob);
+          // console.log(blob);
+          sender(e.data);
+        }
+      })
+    } catch(e) {
+      console.log(e);
+    }
   },
 }
