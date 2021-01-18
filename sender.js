@@ -69,7 +69,6 @@ var mediaRec="";
 
 var RECODE = {
   _timeout:"",
-  conf:"0",
 
   /* Record Video + Audio */
   // MediaRecorder: https://developer.mozilla.org/ja/docs/Web/API/MediaRecorder
@@ -91,6 +90,9 @@ var RECODE = {
 
   /* Request Record Data */
   req: function(mediaRec) {
+
+    // Since the event (dataavailable) occurs multiple times,
+    // it should be counted so that it is not sent too many times.
     var env = 0;
     try {
       setTimeout(RECODE.req, recInt, mediaRec);
