@@ -21,6 +21,14 @@
   margin: 0;
 }
 #receive_video {
+  display: none;
+}
+#receive_video2 {
+  display: none;
+}
+#main_video {
+  width: 640px;
+  height: 360px;
   display: block;
   margin-left: auto;
   margin-right: auto;
