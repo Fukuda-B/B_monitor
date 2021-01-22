@@ -1,7 +1,7 @@
 'use strict';
 
 var recInt = 1000; // Recode Interval
-var fps = 20; // Frame rate / (s)
+var fps = 10; // Frame rate / (s)
 var videoQuo = 0.5 // Video Quality (Max: 1.0)
 var constraints = {
   audio: true,
